@@ -18,5 +18,8 @@ urlpatterns = [
     path('admin-gestionar-ciclo/', views.GestionarCiclo,name='admin-gestionar-ciclo'),
     path('lista-gestionar-ciclo/', views.ListaGestionarCiclo,name='lista-gestionar-ciclo'),
     path('buscar-gestionar-ciclo/', views.BuscarGestionarCiclo,name='buscar-gestionar-ciclo'),
+    path('admin-matricula/', views.Matricula,name='admin-Matricula'),
+    path('lista-matricula/', views.ListaMatricula,name='lista-matricula'),
+    path('buscar-matricula/', views.BuscarMatricula,name='buscar-matricula'),
     
 ]
