@@ -44,3 +44,15 @@ def BuscarCurso(request):
     
     return render(request, 'admin-buscar-curso.html')
 
+#Ciclo
+def Ciclo(request):
+    
+    return render(request, 'admin-ciclo.html')
+
+def ListaCiclo(request):
+    
+    return render(request, 'admin-lista-ciclo.html')
+
+def BuscarCiclo(request):
+    
+    return render(request, 'admin-buscar-ciclo.html')
