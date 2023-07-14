@@ -15,4 +15,8 @@ urlpatterns = [
     path('admin-ciclo/', views.Ciclo,name='admin-ciclo'),
     path('lista-ciclo/', views.ListaCiclo,name='lista-ciclo'),
     path('buscar-ciclo/', views.BuscarCiclo,name='buscar-ciclo'),
+    path('admin-gestionar-ciclo/', views.GestionarCiclo,name='admin-gestionar-ciclo'),
+    path('lista-gestionar-ciclo/', views.ListaGestionarCiclo,name='lista-gestionar-ciclo'),
+    path('buscar-gestionar-ciclo/', views.BuscarGestionarCiclo,name='buscar-gestionar-ciclo'),
+    
 ]
