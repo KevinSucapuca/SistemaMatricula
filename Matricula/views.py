@@ -69,3 +69,16 @@ def ListaGestionarCiclo(request):
 def BuscarGestionarCiclo(request):
     
     return render(request, 'admin-buscar-gestionar-ciclo.html')
+
+#Matrícula
+def Matricula(request):
+    
+    return render(request, 'admin-matricula.html')
+
+def ListaMatricula(request):
+    
+    return render(request, 'admin-lista-matricula.html')
+
+def BuscarMatricula(request):
+    
+    return render(request, 'admin-buscar-matricula.html')
