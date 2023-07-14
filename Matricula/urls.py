@@ -12,5 +12,7 @@ urlpatterns = [
     path('admin-curso/', views.Curso,name='admin-curso'),
     path('lista-curso/', views.ListaCurso,name='lista-curso'),
     path('buscar-curso/', views.BuscarCurso,name='buscar-curso'),
-    
+    path('admin-ciclo/', views.Ciclo,name='admin-ciclo'),
+    path('lista-ciclo/', views.ListaCiclo,name='lista-ciclo'),
+    path('buscar-ciclo/', views.BuscarCiclo,name='buscar-ciclo'),
 ]
