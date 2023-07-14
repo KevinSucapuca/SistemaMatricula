@@ -56,3 +56,16 @@ def ListaCiclo(request):
 def BuscarCiclo(request):
     
     return render(request, 'admin-buscar-ciclo.html')
+
+#GestionarCiclo
+def GestionarCiclo(request):
+    
+    return render(request, 'admin-gestionar-ciclo.html')
+
+def ListaGestionarCiclo(request):
+    
+    return render(request, 'admin-lista-gestionar-ciclo.html')
+
+def BuscarGestionarCiclo(request):
+    
+    return render(request, 'admin-buscar-gestionar-ciclo.html')
