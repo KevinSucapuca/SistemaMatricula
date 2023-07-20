@@ -45,4 +45,12 @@ class Curso(models.Model):
         return data.format(self.nombreCurso, self.vacantes, self.docente) 
 
 
+class Ciclo(models.Model):
+    nombreCiclo = models.CharField(max_length=50)
+    carrera = models.CharField(max_length=50)
+    
+    def __str__(self):
+        data = "{0} {1} "
+        return data.format(self.nombreCiclo, self.carrera) 
+
 
