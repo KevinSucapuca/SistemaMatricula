@@ -15,7 +15,12 @@ class Docente(models.Model):
         
 
 class Alumno(models.Model):
-    dni = models.CharField(max_length=8)
+    dni = models.PositiveIntegerField(
+    validators=[
+        MinLengthValidator(8),  # Mínimo 8 dígitos
+        MaxLengthValidator(8)   # Máximo 8 dígitos
+    ]
+)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
     telefono = models.CharField(max_length=13)
@@ -24,3 +29,4 @@ class Alumno(models.Model):
     def __str__(self):
         data = "{0} {1} {2}"
         return data.format(self.dni,self.nombre, self.apellido)   
+
