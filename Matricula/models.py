@@ -30,3 +30,19 @@ class Alumno(models.Model):
         data = "{0} {1} {2}"
         return data.format(self.dni,self.nombre, self.apellido)   
 
+
+class Curso(models.Model):
+    nombreCurso = models.CharField(max_length=40)
+    vacantes = models.PositiveIntegerField(
+    validators=[
+        MaxLengthValidator(3)   # Máximo 3 dígitos
+    ]
+)
+    docente = models.ForeignKey(Docente, on_delete=models.PROTECT)
+    
+    def __str__(self):
+        data = "{0} {1} {2}"
+        return data.format(self.nombreCurso, self.vacantes, self.docente) 
+
+
+
