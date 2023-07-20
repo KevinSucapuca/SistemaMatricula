@@ -54,3 +54,10 @@ class Ciclo(models.Model):
         return data.format(self.nombreCiclo, self.carrera) 
 
 
+class CicloCurso(models.Model):
+    ciclo = models.ForeignKey(Ciclo, on_delete=models.PROTECT)
+    curso = models.ForeignKey(Curso, on_delete=models.PROTECT)
+    def __str__(self):
+        data = "{0} {1}"
+        return data.format(self.ciclo, self.curso) 
+
