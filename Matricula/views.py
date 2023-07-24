@@ -1,18 +1,50 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render,redirect
+from .models import Docente, Alumno, Ciclo, Curso, CicloCurso
+from django.contrib import messages
+from django.core.paginator import Paginator
 
 def home(request):
     
     return render(request, 'home.html')
 #Docente
-def Docente(request):
+def RegistrarDocente(request):
+    dniExiste = False
+
+    if request.method == 'POST':
+        dniRegistro = request.POST['dni-registro']
+        nombreRegistro = request.POST['nombre-registro']
+        apellidoRegistro = request.POST['apellido-registro']
+        telefonoRegistro = request.POST['telefono-registro']
+        direccionRegistro = request.POST['direccion-registro']
+
+        # Verificar si el Dni ya existe
+        dniExiste = Docente.objects.filter(dni__iexact=dniRegistro).exists()
+
+        # Si el Dni ya existe, mostrar SweetAlert and retornar a la misma página
+        if dniExiste:
+            messages.error(request, "El Alumno ya existe")
+        # Si el Dni no existe, crear el objeto Docente
+        else:
+            Docente.objects.create(dni=dniRegistro, nombre=nombreRegistro, apellido=apellidoRegistro, telefono=telefonoRegistro, direccion=direccionRegistro)
+            messages.success(request, "Alumno Registrado Correctamente")
+            return redirect('admin-docente')
+
+    return render(request, 'admin-docente.html', {'dniExiste': dniExiste})
     
-    return render(request, 'admin-docente.html')
 
 def ListaDocente(request):
-    
-    return render(request, 'admin-lista-docente.html')
+    listaDocente = Docente.objects.all().order_by('apellido')
+    paginator = Paginator(listaDocente, 10)
+    pagina = request.GET.get('page') or 1
+    listaDocente = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaDocente.paginator.num_pages + 1)
+    context = {
+        'listaDocente': listaDocente,
+        'paginas': paginas, 
+        'pagina_actual': pagina_actual
+        }
+    return render(request, 'admin-lista-docente.html', context)
 
 def BuscarDocente(request):
     
