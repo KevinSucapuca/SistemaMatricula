@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 {% block title %} Lista Profesores {% endblock %}
 
-{% block body %}
+{% block section %}
 
 <div class="container-fluid">
     <div class="page-header">
@@ -34,7 +34,7 @@
 <div class="container-fluid">
     <div class="panel panel-success">
         <div class="panel-heading">
-            <h3 class="panel-title"><i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTE</h3>
+            <h3 class="panel-title"><i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTES</h3>
         </div>
         <div class="panel-body">
             <div class="table-responsive">
@@ -46,23 +46,19 @@
                             <th class="text-center">NOMBRES</th>
                             <th class="text-center">APELLIDOS</th>
                             <th class="text-center">TELÉFONO</th>
-                            <th class="text-center">A. CUENTA</th>
                             <th class="text-center">A. DATOS</th>
                             <th class="text-center">ELIMINAR</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for lista in listaDocente %}
                         <tr>
-                            <td>1</td>
-                            <td>7890987651</td>
-                            <td>Nombres</td>
-                            <td>Apellidos</td>
-                            <td>Telefono</td>
-                            <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
-                                </a>
-                            </td>
+                            <td>{{ listaDocente.start_index|add:forloop.counter0 }}</td>
+                            <td>{{lista.dni}}</td>
+                            <td>{{lista.nombre}}</td>
+                            <td>{{lista.apellido}}</td>
+                            <td>{{lista.telefono}}</td>
+                            
                             <td>
                                 <a href="#!" class="btn btn-success btn-raised btn-xs">
                                     <i class="zmdi zmdi-refresh"></i>
@@ -76,44 +72,21 @@
                                 </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>7890987651</td>
-                            <td>Nombres</td>
-                            <td>Apellidos</td>
-                            <td>Telefono</td>
-                            <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <form>
-                                    <button type="submit" class="btn btn-danger btn-raised btn-xs">
-                                        <i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        {% empty %}
+                                <tr>
+                                    <td colspan="7">No se encontraron resultados.</td>
+                                </tr>
+                        {% endfor %}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">{% include "paginacion-lista-docente.html" %}</td>
+                        </tr>
+                    </tfoot>
                 </table>
+
             </div>
-            <nav class="text-center">
-                <ul class="pagination pagination-sm">
-                    <li class="disabled"><a href="javascript:void(0)">«</a></li>
-                    <li class="active"><a href="javascript:void(0)">1</a></li>
-                    <li><a href="javascript:void(0)">2</a></li>
-                    <li><a href="javascript:void(0)">3</a></li>
-                    <li><a href="javascript:void(0)">4</a></li>
-                    <li><a href="javascript:void(0)">5</a></li>
-                    <li><a href="javascript:void(0)">»</a></li>
-                </ul>
-            </nav>
+            
         </div>
     </div>
 </div>
