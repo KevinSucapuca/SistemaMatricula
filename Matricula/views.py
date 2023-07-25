@@ -1,8 +1,11 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Docente, Alumno, Ciclo, Curso, CicloCurso
+from .models import Docente,Alumno,Ciclo,Curso,CicloCurso
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
+
+
+
 def home(request):
     
     return render(request, 'home.html')
@@ -109,9 +112,31 @@ def EliminarDocente(request,docente_id):
 
 
 #Alumno
-def Alumno(request):
-    
-    return render(request, 'admin-alumno.html')
+def RegistrarAlumno(request):
+    DniAlumnoExiste = False
+
+    if request.method == 'POST':
+        dniRegistro = request.POST['dni-registro']
+        nombreRegistro = request.POST['nombre-registro']
+        apellidoRegistro = request.POST['apellido-registro']
+        telefonoRegistro = request.POST['telefono-registro']
+        direccionRegistro = request.POST['direccion-registro']
+
+        # Verificar si el Dni ya existe
+        DniAlumnoExiste = Alumno.objects.filter(dni__iexact=dniRegistro).exists()
+
+        # Si el Dni ya existe, mostrar SweetAlert and retornar a la misma página
+        if DniAlumnoExiste:
+            messages.error(request, "El Estudiante ya existe")
+        # Si el Dni no existe, crear el objeto Alumno
+        else:
+            Alumno.objects.create(dni=dniRegistro, nombre=nombreRegistro, apellido=apellidoRegistro, telefono=telefonoRegistro, direccion=direccionRegistro)
+            messages.success(request, "Estudiante Registrado Correctamente")
+            return redirect('admin-alumno')
+    context ={
+            'DniAlumnoExiste': DniAlumnoExiste,
+            }
+    return render(request, 'admin-alumno.html', context) 
 
 def ListaAlumno(request):
     
