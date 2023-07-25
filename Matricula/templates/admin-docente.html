@@ -11,26 +11,25 @@
     <p class="lead">Panel de Administración dedicado a la gestión de docentes, podrás agregar fácilmente nuevos docentes al sistema. Registra la información relevante de cada docente de manera rápida y sencilla. </p>
 </div>
 
-
 <div class="container-fluid">
     <ul class="breadcrumb breadcrumb-tabs">
-        <li>
-            <a href="{{ '/admin-docente/' }}" class="btn btn-info" style="color: rgb(0, 0, 0);">
-                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO DOCENTE
-            </a>
-        </li>
-        <li>
-            <a href="{{ '/lista-docente/' }}" class="btn btn-success" style="color: red;">
-                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTE
-            </a>
-        </li>
-        <li>
-            <a href="{{ '/buscar-docente/' }}" class="btn btn-primary" style="color: rgb(255, 255, 255);">
-                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR DOCENTE
-            </a>
-        </li>
+            <li>
+                <a href="{{ '/admin-docente/' }}" class="btn btn-info">
+                    <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO DOCENTE
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/lista-docente/' }}" class="btn btn-success">
+                    <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTE
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/buscar-docente/' }}" class="btn btn-primary">
+                    <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR DOCENTE
+                </a>
+            </li>
     </ul>
-</div>
+    </div>
 
 
 <div class="container-fluid">
@@ -84,16 +83,5 @@
                 </p>
             </form>
 
-            {% if messages %}
-            {% for message in messages %}
-                <script>
-                    Swal.fire({
-                        "title": "{{ message.tags }}",
-                        "text": "{{ message }}",
-                        "icon": "{% if message.tags == 'success' %}success{% elif message.tags == 'error' %}error{% endif %}",
-                        "confirmButtonText": "Aceptar"
-                    });
-                </script>
-            {% endfor %}
-        {% endif %}
+            
             {% endblock %}
