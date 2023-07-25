@@ -46,7 +46,7 @@
                             <th class="text-center">NOMBRES</th>
                             <th class="text-center">APELLIDOS</th>
                             <th class="text-center">TELÉFONO</th>
-                            <th class="text-center">A. DATOS</th>
+                            <th class="text-center">EDITAR</th>
                             <th class="text-center">ELIMINAR</th>
                         </tr>
                     </thead>
@@ -60,16 +60,14 @@
                             <td>{{lista.telefono}}</td>
                             
                             <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
+                                <a href="{% url 'editar-docente' lista.id %}" class="btn btn-success btn-raised btn-xs">
+                                    <i class="zmdi zmdi-refresh"></i> 
                                 </a>
                             </td>
                             <td>
-                                <form>
-                                    <button type="submit" class="btn btn-danger btn-raised btn-xs">
-                                        <i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </form>
+                                <a href="{% url 'eliminar-docente' lista.id %}" class="btn btn-danger btn-raised btn-xs">
+                                    <i class="zmdi zmdi-delete"></i> 
+                                </a>
                             </td>
                         </tr>
                         {% empty %}
