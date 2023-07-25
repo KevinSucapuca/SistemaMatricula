@@ -3,9 +3,12 @@ from . import views
 
 urlpatterns = [
     path('', views.home,name='home'),
-    path('admin-docente/', views.Docente,name='admin-docente'),
+    path('admin-docente/', views.RegistrarDocente,name='admin-docente'),
     path('lista-docente/', views.ListaDocente,name='lista-docente'),
     path('buscar-docente/', views.BuscarDocente,name='buscar-docente'),
+    path('editar-docente/<int:docente_id>/', views.EditarDocente, name='editar-docente'),
+    path('editar-docente/<int:docente_id>/guardar/', views.GuardarEditarDocente, name='guardar-editar-docente'),
+    path('eliminar-docente/<int:docente_id>/', views.EliminarDocente, name='eliminar-docente'),
     path('admin-alumno/', views.Alumno,name='admin-alumno'),
     path('lista-alumno/', views.ListaAlumno,name='lista-alumno'),
     path('buscar-alumno/', views.BuscarAlumno,name='buscar-alumno'),
