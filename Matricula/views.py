@@ -154,8 +154,58 @@ def ListaAlumno(request):
     return render(request, 'admin-lista-alumno.html', context)
 
 def BuscarAlumno(request):
+    if 'buscar' in request.GET:
+        buscarAlumno = request.GET['buscar']
+        listabusquedaAlumno = Alumno.objects.filter(
+            Q(dni__icontains=buscarAlumno) |
+            Q(apellido__icontains=buscarAlumno)
+        ).order_by('apellido')
+    else:
+        listabusquedaAlumno = Alumno.objects.all().order_by('apellido')
+
+    paginator = Paginator(listabusquedaAlumno, 10)
+    pagina = request.GET.get('page') or 1
+    listabusquedaAlumno = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listabusquedaAlumno.paginator.num_pages + 1)
+
+    context = {
+        'listabusquedaAlumno': listabusquedaAlumno,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+    }
     
-    return render(request, 'admin-buscar-alumno.html')
+    return render(request, 'admin-buscar-alumno.html', context)
+
+def EditarAlumno(request, alumno_id):
+    alumno = get_object_or_404(Alumno, pk=alumno_id)
+    context = {
+        'alumno': alumno,
+    }
+    return render(request, 'admin-editar-alumno.html', context)
+
+def GuardarEditarAlumno(request, alumno_id):
+    alumno = get_object_or_404(Alumno, pk=alumno_id)
+
+    if request.method == 'POST':
+        dniRegistro = request.POST['dni-registro']
+        nombreRegistro = request.POST['nombre-registro']
+        apellidoRegistro = request.POST['apellido-registro']
+        telefonoRegistro = request.POST['telefono-registro']
+        direccionRegistro = request.POST['direccion-registro']
+
+        alumno.dni = dniRegistro
+        alumno.nombre = nombreRegistro
+        alumno.apellido = apellidoRegistro
+        alumno.telefono = telefonoRegistro
+        alumno.direccion = direccionRegistro
+        alumno.save()
+
+        messages.success(request, "Alumno actualizado correctamente.")
+        return redirect('lista-alumno')
+
+    # Redireccionar a la vista de detalles del alumno actualizado
+    return redirect('lista-alumno', alumno_id=alumno.id)
 
 #Curso
 def Curso(request):
