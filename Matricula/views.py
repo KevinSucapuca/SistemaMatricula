@@ -207,6 +207,12 @@ def GuardarEditarAlumno(request, alumno_id):
     # Redireccionar a la vista de detalles del alumno actualizado
     return redirect('lista-alumno', alumno_id=alumno.id)
 
+def EliminarAlumno(request,alumno_id):
+    AlumnoEliminar = Alumno.objects.get(pk=alumno_id)
+    AlumnoEliminar.delete()
+    messages.success(request, "Estudiante eliminado correctamente.")
+    return redirect('/lista-alumno')
+
 #Curso
 def Curso(request):
     
