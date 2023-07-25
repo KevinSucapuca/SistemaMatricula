@@ -14,6 +14,7 @@ urlpatterns = [
     path('buscar-alumno/', views.BuscarAlumno,name='buscar-alumno'),
     path('editar-alumno/<int:alumno_id>/', views.EditarAlumno, name='editar-alumno'),
     path('editar-alumno/<int:alumno_id>/guardar/', views.GuardarEditarAlumno, name='guardar-editar-alumno'),
+    path('eliminar-alumno/<int:alumno_id>/', views.EliminarAlumno, name='eliminar-alumno'),
     path('admin-curso/', views.Curso,name='admin-curso'),
     path('lista-curso/', views.ListaCurso,name='lista-curso'),
     path('buscar-curso/', views.BuscarCurso,name='buscar-curso'),
