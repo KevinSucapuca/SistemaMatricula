@@ -139,8 +139,19 @@ def RegistrarAlumno(request):
     return render(request, 'admin-alumno.html', context) 
 
 def ListaAlumno(request):
+    listaAlumno = Alumno.objects.all().order_by('apellido')
+    paginator = Paginator(listaAlumno, 10)
+    pagina = request.GET.get('page') or 1
+    listaAlumno = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaAlumno.paginator.num_pages + 1)
+    context = {
+        'listaAlumno': listaAlumno,
+        'paginas': paginas, 
+        'pagina_actual': pagina_actual
+        }
     
-    return render(request, 'admin-lista-alumno.html')
+    return render(request, 'admin-lista-alumno.html', context)
 
 def BuscarAlumno(request):
     
