@@ -101,6 +101,12 @@ def GuardarEditarDocente(request, docente_id):
     return redirect('lista-docente', docente_id=docente.id)
 
 
+def EliminarDocente(request,docente_id):
+    DocenteEliminar = Docente.objects.get(pk=docente_id)
+    DocenteEliminar.delete()
+    messages.success(request, "Docente eliminado correctamente.")
+    return redirect('/lista-docente')
+
 
 #Alumno
 def Alumno(request):
