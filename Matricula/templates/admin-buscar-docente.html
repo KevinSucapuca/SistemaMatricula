@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
-{% block title %} Lista Profesores {% endblock %}
+{% block title %} Buscar Profesores {% endblock %}
 
-{% block body %}
+{% block section %}
 
 <div class="container-fluid">
     <div class="page-header">
@@ -12,31 +12,32 @@
 
 <div class="container-fluid">
     <ul class="breadcrumb breadcrumb-tabs">
-        <li>
-            <a href="{{ '/admin-docente/' }}" class="btn btn-info">
-                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO DOCENTE
-            </a>
-        </li>
-        <li>
-            <a href="{{ '/lista-docente/' }}" class="btn btn-success">
-                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTE
-            </a>
-        </li>
-        <li>
-            <a href="{{ '/buscar-docente/' }}" class="btn btn-primary">
-                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR DOCENTE
-            </a>
-        </li>
+            <li>
+                <a href="{{ '/admin-docente/' }}" class="btn btn-info">
+                    <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO DOCENTE
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/lista-docente/' }}" class="btn btn-success">
+                    <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE DOCENTE
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/buscar-docente/' }}" class="btn btn-primary">
+                    <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR DOCENTE
+                </a>
+            </li>
     </ul>
-</div>
+    </div>
 
 <div class="container-fluid">
-    <form class="well">
+    <form action="{% url 'buscar-docente' %}" class="well" method="get">
+        {% csrf_token %}
         <div class="row">
             <div class="col-xs-12 col-md-8 col-md-offset-2">
                 <div class="form-group label-floating">
                     <span class="control-label">¿A quién estas buscando?</span>
-                    <input class="form-control" type="text" name="search_admin_init" required="">
+                    <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}">
                 </div>
             </div>
             <div class="col-xs-12">
@@ -65,74 +66,44 @@
                             <th class="text-center">NOMBRES</th>
                             <th class="text-center">APELLIDOS</th>
                             <th class="text-center">TELÉFONO</th>
-                            <th class="text-center">A. CUENTA</th>
-                            <th class="text-center">A. DATOS</th>
+                            <th class="text-center">EDITAR</th>
                             <th class="text-center">ELIMINAR</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for list in listabusquedaDocente %}
                         <tr>
-                            <td>1</td>
-                            <td>7890987651</td>
-                            <td>Nombres</td>
-                            <td>Apellidos</td>
-                            <td>Telefono</td>
+                            <td>{{ listabusquedaDocente.start_index|add:forloop.counter0 }}</td>
+                            <td>{{list.dni}}</td>
+                            <td>{{list.nombre}}</td>
+                            <td>{{list.apellido}}</td>
+                            <td>{{list.telefono}}</td>
+                            
                             <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
+                                <a href="{% url 'editar-docente' list.id %}" class="btn btn-success btn-raised btn-xs">
+                                    <i class="zmdi zmdi-refresh"></i> 
                                 </a>
                             </td>
                             <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
+                                <a href="{% url 'eliminar-docente' list.id %}" class="btn btn-danger btn-raised btn-xs">
+                                    <i class="zmdi zmdi-delete"></i> 
                                 </a>
-                            </td>
-                            <td>
-                                <form>
-                                    <button type="submit" class="btn btn-danger btn-raised btn-xs">
-                                        <i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>7890987651</td>
-                            <td>Nombres</td>
-                            <td>Apellidos</td>
-                            <td>Telefono</td>
-                            <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="#!" class="btn btn-success btn-raised btn-xs">
-                                    <i class="zmdi zmdi-refresh"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <form>
-                                    <button type="submit" class="btn btn-danger btn-raised btn-xs">
-                                        <i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
+                        {% empty %}
+                                <tr>
+                                    <td colspan="7">No se encontraron resultados.</td>
+                                </tr>
+                        {% endfor %}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">{% include "paginacion-lista-buscar-docente.html" %}</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
-            <nav class="text-center">
-                <ul class="pagination pagination-sm">
-                    <li class="disabled"><a href="javascript:void(0)">«</a></li>
-                    <li class="active"><a href="javascript:void(0)">1</a></li>
-                    <li><a href="javascript:void(0)">2</a></li>
-                    <li><a href="javascript:void(0)">3</a></li>
-                    <li><a href="javascript:void(0)">4</a></li>
-                    <li><a href="javascript:void(0)">5</a></li>
-                    <li><a href="javascript:void(0)">»</a></li>
-                </ul>
-            </nav>
+            
         </div>
     </div>
 </div>
