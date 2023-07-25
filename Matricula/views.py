@@ -1,8 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .models import Docente, Alumno, Ciclo, Curso, CicloCurso
 from django.contrib import messages
 from django.core.paginator import Paginator
-
+from django.db.models import Q
 def home(request):
     
     return render(request, 'home.html')
@@ -22,11 +22,11 @@ def RegistrarDocente(request):
 
         # Si el Dni ya existe, mostrar SweetAlert and retornar a la misma página
         if dniExiste:
-            messages.error(request, "El Alumno ya existe")
+            messages.error(request, "El Docente ya existe")
         # Si el Dni no existe, crear el objeto Docente
         else:
             Docente.objects.create(dni=dniRegistro, nombre=nombreRegistro, apellido=apellidoRegistro, telefono=telefonoRegistro, direccion=direccionRegistro)
-            messages.success(request, "Alumno Registrado Correctamente")
+            messages.success(request, "Docente Registrado Correctamente")
             return redirect('admin-docente')
 
     return render(request, 'admin-docente.html', {'dniExiste': dniExiste})
@@ -47,8 +47,60 @@ def ListaDocente(request):
     return render(request, 'admin-lista-docente.html', context)
 
 def BuscarDocente(request):
-    
-    return render(request, 'admin-buscar-docente.html')
+    if 'buscar' in request.GET:
+        buscarDocente = request.GET['buscar']
+        listabusquedaDocente = Docente.objects.filter(
+            Q(dni__icontains=buscarDocente) |
+            Q(apellido__icontains=buscarDocente)
+        ).order_by('apellido')
+    else:
+        listabusquedaDocente = Docente.objects.all().order_by('apellido')
+
+    paginator = Paginator(listabusquedaDocente, 10)
+    pagina = request.GET.get('page') or 1
+    listabusquedaDocente = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listabusquedaDocente.paginator.num_pages + 1)
+
+    context = {
+        'listabusquedaDocente': listabusquedaDocente,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+    }
+
+    return render(request, 'admin-buscar-docente.html', context)
+
+def EditarDocente(request, docente_id):
+    docente = get_object_or_404(Docente, pk=docente_id)
+    context = {
+        'docente': docente,
+    }
+    return render(request, 'admin-editar-docente.html', context)
+
+def GuardarEditarDocente(request, docente_id):
+    docente = get_object_or_404(Docente, pk=docente_id)
+
+    if request.method == 'POST':
+        dniRegistro = request.POST['dni-registro']
+        nombreRegistro = request.POST['nombre-registro']
+        apellidoRegistro = request.POST['apellido-registro']
+        telefonoRegistro = request.POST['telefono-registro']
+        direccionRegistro = request.POST['direccion-registro']
+
+        docente.dni = dniRegistro
+        docente.nombre = nombreRegistro
+        docente.apellido = apellidoRegistro
+        docente.telefono = telefonoRegistro
+        docente.direccion = direccionRegistro
+        docente.save()
+
+        messages.success(request, "Docente actualizado correctamente.")
+        return redirect('lista-docente')
+
+    # Redireccionar a la vista de detalles del docente actualizado
+    return redirect('lista-docente', docente_id=docente.id)
+
+
 
 #Alumno
 def Alumno(request):
