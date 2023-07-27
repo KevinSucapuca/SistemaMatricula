@@ -214,9 +214,50 @@ def EliminarAlumno(request,alumno_id):
     return redirect('/lista-alumno')
 
 #Curso
-def Curso(request):
-    
-    return render(request, 'admin-curso.html')
+def RegistrarCurso(request):
+    docentes = Docente.objects.all()  # Obtener todos los docentes de la base de datos
+
+    if request.method == 'POST':
+        # Obtener los datos del formulario enviado por el usuario
+        nombre_curso = request.POST.get('nombrecurso-reg')
+        vacantes_str = request.POST.get('vacantes-reg')
+        docente_id = request.POST.get('direccion-reg')
+
+        # Validar que se haya seleccionado un docente
+        if not docente_id:
+            messages.error(request, "Debes seleccionar un docente.")
+            return render(request, 'admin-curso.html', {'docentes': docentes})
+
+        # Validar que el campo de "Vacantes" no esté vacío
+        if not vacantes_str:
+            messages.error(request, "El campo Vacantes no puede estar vacío.")
+            return render(request, 'admin-curso.html', {'docentes': docentes})
+
+        # Convertir el campo de "Vacantes" a entero
+        try:
+            vacantes = int(vacantes_str)
+        except ValueError:
+            messages.error(request, "El valor de Vacantes debe ser un número entero válido.")
+            return render(request, 'admin-curso.html', {'docentes': docentes})
+
+        try:
+            # Buscar el docente seleccionado por su ID
+            docente = Docente.objects.get(pk=docente_id)
+
+            # Crear un nuevo objeto Curso y guardar en la base de datos
+            nuevo_curso = Curso(nombreCurso=nombre_curso, vacantes=vacantes, docente=docente)
+            nuevo_curso.save()
+
+            messages.success(request, "Curso agregado correctamente.")
+            return redirect('lista-curso')
+        except Docente.DoesNotExist:
+            # Si el docente no existe, manejar el error y mostrar mensaje de error
+            messages.error(request, "El docente no existe.")
+            return render(request, 'admin-curso.html', {'docentes': docentes})
+
+    context = {'docentes': docentes}
+    return render(request, 'admin-curso.html', context)
+
 
 def ListaCurso(request):
     
