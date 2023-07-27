@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.validators import MinLengthValidator,MaxLengthValidator
 # Create your models here.
 
 class Docente(models.Model):
