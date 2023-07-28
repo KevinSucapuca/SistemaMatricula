@@ -333,6 +333,12 @@ def GuardarEditarCurso(request, curso_id):
         return redirect('lista-curso')
 
     return render(request, 'admin-editar-curso.html', {'curso': curso, 'docentes': docentes})
+
+def EliminarCurso(request,curso_id):
+    CursoEliminar = Curso.objects.get(pk=curso_id)
+    CursoEliminar.delete()
+    messages.success(request, "Curso eliminado correctamente.")
+    return redirect('/lista-curso')
 #Ciclo
 def Ciclo(request):
     
