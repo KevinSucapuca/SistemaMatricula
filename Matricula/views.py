@@ -298,6 +298,41 @@ def BuscarCurso(request):
     
     return render(request, 'admin-buscar-curso.html', context)
 
+def EditarCurso(request, curso_id):
+    curso = get_object_or_404(Curso, pk=curso_id)
+    docentes = Docente.objects.all()
+
+    context = {
+        'curso': curso,
+        'docentes': docentes,
+    }
+    return render(request, 'admin-editar-curso.html', context)
+
+def GuardarEditarCurso(request, curso_id):
+    curso = get_object_or_404(Curso, pk=curso_id)
+    docentes = Docente.objects.all()
+
+    if request.method == 'POST':
+        nombre_curso = request.POST['nombrecurso-reg']
+        vacantes = request.POST['vacantes-reg']
+        docente_id = request.POST['direccion-reg']
+
+        if not docente_id:
+            messages.error(request, "Debes seleccionar un docente.")
+            return render(request, 'admin-editar-curso.html', {'curso': curso, 'docentes': docentes})
+
+        docente = get_object_or_404(Docente, pk=docente_id)
+
+        curso.nombreCurso = nombre_curso
+        curso.vacantes = vacantes
+        curso.docente = docente
+
+        curso.save()
+
+        messages.success(request, "Curso actualizado correctamente.")
+        return redirect('lista-curso')
+
+    return render(request, 'admin-editar-curso.html', {'curso': curso, 'docentes': docentes})
 #Ciclo
 def Ciclo(request):
     
