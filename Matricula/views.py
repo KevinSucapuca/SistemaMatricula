@@ -398,6 +398,36 @@ def BuscarCiclo(request):
     
     return render(request, 'admin-buscar-ciclo.html', context)
 
+def EditarCiclo(request, ciclo_id):
+    ciclo = get_object_or_404(Ciclo, pk=ciclo_id)
+    context = {
+        'ciclo': ciclo,
+    }
+    return render(request, 'admin-editar-ciclo.html', context)
+
+def GuardarEditarCiclo(request, ciclo_id):
+    ciclo = get_object_or_404(Ciclo, pk=ciclo_id)
+
+    if request.method == 'POST':
+        nombre_ciclo = request.POST['nombreCiclo']
+        carrera = request.POST['direccion-reg']
+        
+        # Validar que se haya seleccionado una carrera
+        if not carrera or carrera == 'opcion1':
+            messages.error(request, "Debes seleccionar una carrera válida.")
+            return redirect('editar-ciclo', ciclo_id=ciclo_id)
+        
+        ciclo.nombreCiclo = nombre_ciclo
+        ciclo.carrera = carrera
+    
+        ciclo.save()
+
+        messages.success(request, "Ciclo actualizado correctamente.")
+        return redirect('lista-ciclo')
+
+    # Redireccionar a la vista de detalles del ciclo actualizado
+    return redirect('lista-ciclo', ciclo_id=ciclo_id)
+
 #GestionarCiclo
 def GestionarCiclo(request):
     
