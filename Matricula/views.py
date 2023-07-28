@@ -260,8 +260,19 @@ def RegistrarCurso(request):
 
 
 def ListaCurso(request):
+    listaCurso = Curso.objects.all().order_by('nombreCurso')
+    paginator = Paginator(listaCurso, 10)
+    pagina = request.GET.get('page') or 1
+    listaCurso = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaCurso.paginator.num_pages + 1)
+    context = {
+        'listaCurso': listaCurso,
+        'paginas': paginas, 
+        'pagina_actual': pagina_actual
+        }
     
-    return render(request, 'admin-lista-curso.html')
+    return render(request, 'admin-lista-curso.html', context)
 
 def BuscarCurso(request):
     
