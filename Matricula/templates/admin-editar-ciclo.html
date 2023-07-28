@@ -1,0 +1,84 @@
+{% extends "./base.html" %}
+{% block title %} Editar Ciclo {% endblock %}
+
+
+
+{% block section %}
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>CICLO</small></h1>
+    </div>
+    <p class="lead">Panel de Administración dedicado a la gestión de cicloc, podrás editar fácilmente la información de los ciclos del sistema. Actualiza la información relevante de cada ciclo de manera rápida y sencilla. </p>
+</div>
+
+<div class="container-fluid">
+    <ul class="breadcrumb breadcrumb-tabs">
+            <li>
+                <a href="{{ '/admin-ciclo/' }}" class="btn btn-info">
+                    <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CICLO
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/lista-ciclo/' }}" class="btn btn-success">
+                    <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CICLO
+                </a>
+            </li>
+            <li>
+                <a href="{{ '/buscar-ciclo/' }}" class="btn btn-primary">
+                    <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR CICLO
+                </a>
+            </li>
+            
+    </ul>
+    </div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-edit"></i> &nbsp; EDITAR CICLO</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'guardar-editar-ciclo' ciclo.id %}" method="POST">{% csrf_token %}
+                
+                <fieldset>
+                    <legend><i class="zmdi zmdi-account-box"></i> &nbsp; Información de Ciclo</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group label-floating">
+                                    <label class="control-label">Nombre de Ciclo*</label>
+                                    <input pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,40}" class="form-control" type="text" name="nombreCiclo" required="" maxlength="40" value="{{ ciclo.nombreCiclo }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Carrera</label>
+                                <select name="direccion-reg" class="form-control">
+                                    <option value="opcion1">- Seleccionar -</option>
+
+                                    <option value="Computación e Informática" {% if ciclo.carrera == 'Computación e Informática' %}selected{% endif %}>Computación e Informática</option>
+                                    <option value="Administración de Empresas" {% if ciclo.carrera == 'Administración de Empresas' %}selected{% endif %}>Administración de Empresas</option>
+                                    <option value="Marketing Digital" {% if ciclo.carrera == 'Marketing Digital' %}selected{% endif %}>Marketing Digital</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+
+
+
+                <br>
+                
+                <p class="text-center" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Modificar</button>
+                    <a href="{% url 'lista-ciclo' %}" class="btn btn-default btn-raised btn-sm">
+                        <i class="zmdi zmdi-close-circle"></i> &nbsp; Cancelar
+                    </a>
+                </p>
+            </form>
+            
+
+        
+            {% endblock %}
