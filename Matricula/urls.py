@@ -20,6 +20,7 @@ urlpatterns = [
     path('buscar-curso/', views.BuscarCurso,name='buscar-curso'),
     path('editar-curso/<int:curso_id>/', views.EditarCurso, name='editar-curso'),
     path('editar-curso/<int:curso_id>/guardar/', views.GuardarEditarCurso, name='guardar-editar-curso'),
+    path('eliminar-curso/<int:curso_id>/', views.EliminarCurso, name='eliminar-curso'),
     path('admin-ciclo/', views.Ciclo,name='admin-ciclo'),
     path('lista-ciclo/', views.ListaCiclo,name='lista-ciclo'),
     path('buscar-ciclo/', views.BuscarCiclo,name='buscar-ciclo'),
