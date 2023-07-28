@@ -1,0 +1,90 @@
+{% extends "./base.html" %}
+{% block title %} Lista Cursos {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>CURSO</small></h1>
+    </div>
+    <p class="lead">Panel de Administración para listar y modificar la información de los cursos registrados. Visualiza de forma organizada todos los cursos.</p>
+</div>
+
+<div class="container-fluid">
+<ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-curso/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CURSO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-curso/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CURSO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-curso/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR CURSO
+            </a>
+        </li>
+</ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CURSOS</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">NOMBRE DE CURSO</th>
+                            <th class="text-center">VACANTES</th>
+                            <th class="text-center">DOCENTE</th>
+                            <th class="text-center">EDITAR</th>
+                            <th class="text-center">ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lista in listaCurso %}
+                        <tr>
+                            <td>{{ listaCurso.start_index|add:forloop.counter0 }}</td>
+                            <td>{{lista.nombreCurso}}</td>
+                            <td>{{lista.vacantes}}</td>
+                            <td>{{lista.docente.nombre}} {{lista.docente.apellido}}</td>
+                            
+                            
+                            <td>
+                                <a href="{% url 'editar-alumno' lista.id %}" class="btn btn-success btn-raised btn-xs">
+                                    <i class="zmdi zmdi-refresh"></i> 
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'eliminar-alumno' lista.id %}" class="btn btn-danger btn-raised btn-xs">
+                                    <i class="zmdi zmdi-delete"></i> 
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                                <tr>
+                                    <td colspan="6">No se encontraron resultados.</td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">{% include "paginacion-lista-curso.html" %}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
