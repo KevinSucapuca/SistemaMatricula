@@ -1,0 +1,82 @@
+{% extends "./base.html" %}
+{% block title %} Cursos {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>CURSO</small></h1>
+    </div>
+    <p class="lead">Panel de Administración dedicado a la gestión de cursos, podrás agregar fácilmente nuevos curos al sistema. Registra la información relevante de cada curso de manera rápida y sencilla. </p>
+</div>
+
+<div class="container-fluid">
+    <ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-curso/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CURSO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-curso/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CURSO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-curso/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR CURSO
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CURSO</h3>
+        </div>
+        <div class="panel-body">
+            <form action="/admin-curso/" method="POST">{% csrf_token %}
+                <fieldset>
+                    <legend><i class="zmdi zmdi-account-box"></i> &nbsp; Información de Curso</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group label-floating">
+                                    <label class="control-label">Nombre de Curso*</label>
+                                    <input pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ ]{1,40}" class="form-control" type="text" name="nombrecurso-reg" required="" maxlength="40">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-group label-floating">
+                                    <label class="control-label">Vacantes *</label>
+                                    <input pattern="[0-9]{1,5}" class="form-control" type="text" name="vacantes-reg" required="" maxlength="5">
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Docente</label>
+                                <select name="direccion-reg" class="form-control">
+                                    <option value="">- Seleccionar -</option>
+                                    {% for docente in docentes %}
+                                        <option value="{{ docente.id }}">{{ docente.nombre }} {{ docente.apellido }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                
+                <p class="text-center" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Guardar</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
