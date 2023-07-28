@@ -360,7 +360,7 @@ def RegistrarCiclo(request):
     return render(request, 'admin-ciclo.html')
 
 def ListaCiclo(request):
-    listaCiclo = Ciclo.objects.all().order_by('nombreCiclo')
+    listaCiclo = Ciclo.objects.all().order_by('-id')
     paginator = Paginator(listaCiclo, 10)
     pagina = request.GET.get('page') or 1
     listaCiclo = paginator.get_page(pagina)
@@ -375,8 +375,28 @@ def ListaCiclo(request):
     return render(request, 'admin-lista-ciclo.html', context)
 
 def BuscarCiclo(request):
+    if 'buscar' in request.GET:
+        buscarCiclo = request.GET['buscar']
+        listaCiclo = Ciclo.objects.filter(
+            Q(nombreCiclo__icontains=buscarCiclo) |
+            Q(carrera__icontains=buscarCiclo)
+        ).order_by('-id')
+    else:
+        listaCiclo = Ciclo.objects.all().order_by('-id')
+
+    paginator = Paginator(listaCiclo, 10)
+    pagina = request.GET.get('page') or 1
+    listaCiclo = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaCiclo.paginator.num_pages + 1)
+
+    context = {
+        'listaCiclo': listaCiclo,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+    }
     
-    return render(request, 'admin-buscar-ciclo.html')
+    return render(request, 'admin-buscar-ciclo.html', context)
 
 #GestionarCiclo
 def GestionarCiclo(request):
