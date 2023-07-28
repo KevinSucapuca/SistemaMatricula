@@ -360,8 +360,19 @@ def RegistrarCiclo(request):
     return render(request, 'admin-ciclo.html')
 
 def ListaCiclo(request):
+    listaCiclo = Ciclo.objects.all().order_by('nombreCiclo')
+    paginator = Paginator(listaCiclo, 10)
+    pagina = request.GET.get('page') or 1
+    listaCiclo = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaCiclo.paginator.num_pages + 1)
+    context = {
+        'listaCiclo': listaCiclo,
+        'paginas': paginas, 
+        'pagina_actual': pagina_actual
+        }
     
-    return render(request, 'admin-lista-ciclo.html')
+    return render(request, 'admin-lista-ciclo.html', context)
 
 def BuscarCiclo(request):
     
