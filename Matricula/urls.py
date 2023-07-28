@@ -26,6 +26,7 @@ urlpatterns = [
     path('buscar-ciclo/', views.BuscarCiclo,name='buscar-ciclo'),
     path('editar-ciclo/<int:ciclo_id>/', views.EditarCiclo, name='editar-ciclo'),
     path('editar-ciclo/<int:ciclo_id>/guardar/', views.GuardarEditarCiclo, name='guardar-editar-ciclo'),
+    path('eliminar-ciclo/<int:ciclo_id>/', views.EliminarCiclo, name='eliminar-ciclo'),
     path('admin-gestionar-ciclo/', views.GestionarCiclo,name='admin-gestionar-ciclo'),
     path('lista-gestionar-ciclo/', views.ListaGestionarCiclo,name='lista-gestionar-ciclo'),
     path('buscar-gestionar-ciclo/', views.BuscarGestionarCiclo,name='buscar-gestionar-ciclo'),
