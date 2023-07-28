@@ -275,8 +275,28 @@ def ListaCurso(request):
     return render(request, 'admin-lista-curso.html', context)
 
 def BuscarCurso(request):
+    if 'buscar' in request.GET:
+        buscarCurso = request.GET['buscar']
+        listaCurso = Curso.objects.filter(
+            Q(nombreCurso__icontains=buscarCurso) |
+            Q(docente__apellido__icontains=buscarCurso)
+        ).order_by('nombreCurso')
+    else:
+        listaCurso = Curso.objects.all().order_by('nombreCurso')
+
+    paginator = Paginator(listaCurso, 10)
+    pagina = request.GET.get('page') or 1
+    listaCurso = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaCurso.paginator.num_pages + 1)
+
+    context = {
+        'listaCurso': listaCurso,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+    }
     
-    return render(request, 'admin-buscar-curso.html')
+    return render(request, 'admin-buscar-curso.html', context)
 
 #Ciclo
 def Ciclo(request):
