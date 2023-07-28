@@ -428,6 +428,12 @@ def GuardarEditarCiclo(request, ciclo_id):
     # Redireccionar a la vista de detalles del ciclo actualizado
     return redirect('lista-ciclo', ciclo_id=ciclo_id)
 
+def EliminarCiclo(request,ciclo_id):
+    CicloEliminar = Ciclo.objects.get(pk=ciclo_id)
+    CicloEliminar.delete()
+    messages.success(request, "Ciclo eliminado correctamente.")
+    return redirect('/lista-ciclo')
+
 #GestionarCiclo
 def GestionarCiclo(request):
     
