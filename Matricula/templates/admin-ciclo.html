@@ -1,0 +1,79 @@
+{% extends "./base.html" %}
+{% block title %} Ciclos {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>CICLO</small></h1>
+    </div>
+    <p class="lead">Panel de Administración dedicado a la gestión de ciclos académicos, podrás agregar fácilmente nuevos ciclos al sistema. Registra la información relevante de cada ciclo de manera rápida y sencilla. </p>
+</div>
+
+<div class="container-fluid">
+    <ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-ciclo/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CICLO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-ciclo/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CICLO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-ciclo/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR CICLO
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CICLO</h3>
+        </div>
+        <div class="panel-body">
+            <form method="post" action="{% url 'admin-ciclo' %}">
+                {% csrf_token %}
+                <fieldset>
+                    <legend><i class="zmdi zmdi-account-box"></i> &nbsp; Información de Ciclo</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group label-floating">
+                                    <label class="control-label">Número de Ciclo *</label>
+                                    <input pattern="[0-9-]{1,10}" class="form-control" type="text" name="numerociclo-reg" required="" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-8">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Carrera</label>
+                                <select name="direccion-reg" class="form-control">
+                                    <option value="opcion1">- Seleccionar -</option>
+                                    <option value="Computación e Informática">Computación e Informática</option>
+                                    <option value="Administración de Empresas">Administración de Empresas</option>
+                                    <option value="Marketing Digital">Marketing Digital</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        
+                        
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                
+                <p class="text-center" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Guardar</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
