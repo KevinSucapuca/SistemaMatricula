@@ -339,9 +339,24 @@ def EliminarCurso(request,curso_id):
     CursoEliminar.delete()
     messages.success(request, "Curso eliminado correctamente.")
     return redirect('/lista-curso')
+
 #Ciclo
-def Ciclo(request):
-    
+def RegistrarCiclo(request):
+    if request.method == 'POST':
+        # Obtener los datos del formulario enviado por el usuario
+        nombre_ciclo = request.POST.get('numerociclo-reg')
+        carrera = request.POST.get('direccion-reg')
+
+        # Validar que se haya seleccionado una carrera
+        if not carrera or carrera == 'opcion1':
+            messages.error(request, "Debes seleccionar una carrera válida.")
+            return redirect('admin-ciclo')
+
+        # Crear el objeto Ciclo y guardarlo en la base de datos
+        ciclo = Ciclo.objects.create(nombreCiclo=nombre_ciclo, carrera=carrera)
+        messages.success(request, "Ciclo Registrado Correctamente.")
+        return redirect('lista-ciclo')
+
     return render(request, 'admin-ciclo.html')
 
 def ListaCiclo(request):
