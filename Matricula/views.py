@@ -476,11 +476,44 @@ def GestionarCiclo(request):
 
 def ListaGestionarCiclo(request):
     
-    return render(request, 'admin-lista-gestionar-ciclo.html')
+    listaGestionarCiclo = CicloCurso.objects.all().order_by('-ciclo_id')
+    paginator = Paginator(listaGestionarCiclo, 10)
+    pagina = request.GET.get('page') or 1
+    listaGestionarCiclo = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaGestionarCiclo.paginator.num_pages + 1)
+    context = {
+        'listaGestionarCiclo': listaGestionarCiclo,
+        'paginas': paginas, 
+        'pagina_actual': pagina_actual
+        }
+    
+    return render(request, 'admin-lista-gestionar-ciclo.html', context)
 
 def BuscarGestionarCiclo(request):
+    if 'buscar' in request.GET:
+        buscarGestionarCiclo = request.GET['buscar']
+        listaGestionarCiclo = CicloCurso.objects.filter(
+            Q(ciclo__nombreCiclo__icontains=buscarGestionarCiclo) |
+            Q(curso__nombreCurso__icontains=buscarGestionarCiclo) |
+            Q(ciclo__carrera__icontains=buscarGestionarCiclo)
+        ).order_by('-ciclo_id')
+    else:
+        listaGestionarCiclo = CicloCurso.objects.all().order_by('-ciclo_id')
+
+    paginator = Paginator(listaGestionarCiclo, 10)
+    pagina = request.GET.get('page') or 1
+    listaGestionarCiclo = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaGestionarCiclo.paginator.num_pages + 1)
+
+    context = {
+        'listaGestionarCiclo': listaGestionarCiclo,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+    }
     
-    return render(request, 'admin-buscar-gestionar-ciclo.html')
+    return render(request, 'admin-buscar-gestionar-ciclo.html', context)
 
 #Matrícula
 def Matricula(request):
