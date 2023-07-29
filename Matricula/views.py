@@ -436,8 +436,43 @@ def EliminarCiclo(request,ciclo_id):
 
 #GestionarCiclo
 def GestionarCiclo(request):
-    
-    return render(request, 'admin-gestionar-ciclo.html')
+    ciclos = Ciclo.objects.all()
+    cursos = Curso.objects.all()
+
+    if request.method == 'POST':
+        nombre_ciclo_id = request.POST.get('ciclo-reg')
+        curso_id = request.POST.get('curso-reg')
+
+        if not nombre_ciclo_id:
+            messages.error(request, "Debes seleccionar un ciclo.")
+            return render(request, 'admin-gestionar-ciclo.html', {'ciclos': ciclos, 'cursos': cursos})
+
+        if not curso_id:
+            messages.error(request, "Selecciona un curso válido.")
+            return render(request, 'admin-gestionar-ciclo.html', {'ciclos': ciclos, 'cursos': cursos})
+
+        ciclo = Ciclo.objects.get(pk=nombre_ciclo_id)
+        curso = Curso.objects.get(pk=curso_id)
+
+        # Verificar si el curso ya está asociado al ciclo
+        if CicloCurso.objects.filter(ciclo=ciclo, curso=curso).exists():
+            messages.error(request, "El curso ya está asociado a este ciclo.")
+            return render(request, 'admin-gestionar-ciclo.html', {'ciclos': ciclos, 'cursos': cursos})
+
+        # Verificar la cantidad de cursos asociados al ciclo
+        cantidad_cursos = CicloCurso.objects.filter(ciclo=ciclo).count()
+        if cantidad_cursos >= 5:
+            messages.error(request, "El ciclo ya tiene el máximo de cursos permitidos (5).")
+            return render(request, 'admin-gestionar-ciclo.html', {'ciclos': ciclos, 'cursos': cursos})
+
+        # Si el curso no está duplicado y la cantidad de cursos es menor a 5, agregarlo al ciclo
+        CicloCurso.objects.create(ciclo=ciclo, curso=curso)
+
+        messages.success(request, "Curso agregado al ciclo correctamente.")
+        return redirect('lista-gestionar-ciclo')
+
+    context = {'ciclos': ciclos, 'cursos': cursos}
+    return render(request, 'admin-gestionar-ciclo.html', context) 
 
 def ListaGestionarCiclo(request):
     
