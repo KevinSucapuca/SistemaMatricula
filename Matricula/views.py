@@ -515,6 +515,64 @@ def BuscarGestionarCiclo(request):
     
     return render(request, 'admin-buscar-gestionar-ciclo.html', context)
 
+def EditarGestionarCiclo(request, ciclo_id):
+    ciclocurso = get_object_or_404(CicloCurso, pk=ciclo_id)
+    ciclos = Ciclo.objects.all()
+    cursos = Curso.objects.all()
+
+    context = {
+        'ciclocurso': ciclocurso,
+        'ciclos': ciclos,
+        'cursos': cursos,
+    }
+    return render(request, 'admin-editar-gestionar-ciclo.html', context)
+
+def GuardarEditarGestionarCiclo(request, ciclo_id):
+    ciclocurso = get_object_or_404(CicloCurso, pk=ciclo_id)
+    ciclos = Ciclo.objects.all()
+    cursos = Curso.objects.all()
+
+    if request.method == 'POST':
+        nombre_ciclo_id = request.POST.get('ciclo-reg')
+        curso_id = request.POST.get('curso-reg')
+
+        if not nombre_ciclo_id:
+            messages.error(request, "Debes seleccionar un ciclo.")
+            return render(request, 'admin-editar-gestionar-ciclo.html', {'ciclocurso': ciclocurso, 'ciclos': ciclos, 'cursos': cursos})
+
+        if not curso_id:
+            messages.error(request, "Selecciona un curso válido.")
+            return render(request, 'admin-editar-gestionar-ciclo.html', {'ciclocurso': ciclocurso, 'ciclos': ciclos, 'cursos': cursos})
+
+        ciclo = Ciclo.objects.get(pk=nombre_ciclo_id)
+        curso = Curso.objects.get(pk=curso_id)
+
+        
+        # Verificar si el ciclo ya tiene 5 cursos asociados, pero permitir editar el curso
+        if CicloCurso.objects.filter(ciclo=ciclo).count() > 5:
+            ciclocurso.ciclo = ciclo
+            ciclocurso.curso = curso
+            ciclocurso.save()
+            messages.success(request, "Curso actualizado correctamente.")
+            return redirect('lista-gestionar-ciclo')
+
+        # Si el curso ya está asociado a este ciclo
+        if CicloCurso.objects.filter(ciclo=ciclo, curso=curso).exists():
+            messages.info(request, "El curso ya está asociado a este ciclo.")
+            return render(request, 'admin-editar-gestionar-ciclo.html', {'ciclocurso': ciclocurso, 'ciclos': ciclos, 'cursos': cursos})
+
+        # Si todo está bien, actualizamos el ciclo y el curso en el objeto CicloCurso
+        ciclocurso.ciclo = ciclo
+        ciclocurso.curso = curso
+        ciclocurso.save()
+
+        messages.success(request, "CicloCurso actualizado correctamente.")
+        return redirect('lista-gestionar-ciclo')
+
+    return render(request, 'admin-editar-gestionar-ciclo.html', {'ciclocurso': ciclocurso, 'ciclos': ciclos, 'cursos': cursos})
+
+
+
 #Matrícula
 def Matricula(request):
     
