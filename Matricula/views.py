@@ -571,7 +571,11 @@ def GuardarEditarGestionarCiclo(request, ciclo_id):
 
     return render(request, 'admin-editar-gestionar-ciclo.html', {'ciclocurso': ciclocurso, 'ciclos': ciclos, 'cursos': cursos})
 
-
+def EliminarGestionarCiclo(request,gestionarcurso_id):
+    GestionarCicloEliminar = CicloCurso.objects.get(pk=gestionarcurso_id)
+    GestionarCicloEliminar.delete()
+    messages.success(request, "Curso del ciclo eliminado correctamente.")
+    return redirect('lista-gestionar-ciclo')
 
 #Matrícula
 def Matricula(request):
