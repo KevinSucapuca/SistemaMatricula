@@ -1,0 +1,90 @@
+{% extends "./base.html" %}
+{% block title %} Lista Ciclos {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>CICLO</small></h1>
+    </div>
+    <p class="lead">Panel de Administración para listar y modificar la información de los ciclos académicos registrados. Visualiza de forma organizada todos los cursos de cada ciclo académico.</p>
+</div>
+
+<div class="container-fluid">
+<ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-gestionar-ciclo/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVO CICLO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-gestionar-ciclo/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CICLO
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-gestionar-ciclo/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR CICLO
+            </a>
+        </li>
+</ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE CICLOS</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">NOMBRE DE CICLO</th>
+                            <th class="text-center">NOMBRE CURSO</th>
+                            <th class="text-center">NOMBRE CARRERA</th>
+                            <th class="text-center">EDITAR</th>
+                            <th class="text-center">ELIMIAR</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lista in listaGestionarCiclo %}
+                        <tr>
+                            <td>{{ listaGestionarCiclo.start_index|add:forloop.counter0 }}</td>
+                            <td>{{lista.ciclo.nombreCiclo}} ({{lista.ciclo.id}})</td>
+                            <td>{{lista.curso.nombreCurso}}</td>
+                            <td>{{lista.ciclo.carrera}}</td>
+                            
+                            <td>
+                                <a href="{% url 'editar-gestionar-ciclo' lista.id %}" class="btn btn-success btn-raised btn-xs">
+                                    <i class="zmdi zmdi-refresh"></i> 
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'eliminar-gestionar-curso' lista.id %}" class="btn btn-danger btn-raised btn-xs">
+                                    <i class="zmdi zmdi-delete"></i> 
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                                <tr>
+                                    <td colspan="6">No se encontraron resultados.</td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">{% include "paginacion-lista-gestionar-ciclo.html" %}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
