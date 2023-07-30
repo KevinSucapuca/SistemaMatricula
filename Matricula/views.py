@@ -7,8 +7,15 @@ from django.db.models import Q
 
 
 def home(request):
-    
-    return render(request, 'home.html')
+    total_cursos = Curso.objects.all().count()
+    total_docentes = Docente.objects.all().count()
+    total_alumnos = Alumno.objects.all().count()
+    context = {
+        'total_cursos': total_cursos,
+        'total_docentes': total_docentes,
+        'total_alumnos': total_alumnos
+    }
+    return render(request, 'home.html', context)
 #Docente
 def RegistrarDocente(request):
     dniExiste = False
@@ -589,3 +596,6 @@ def ListaMatricula(request):
 def BuscarMatricula(request):
     
     return render(request, 'admin-buscar-matricula.html')
+
+
+    
