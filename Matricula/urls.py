@@ -33,7 +33,7 @@ urlpatterns = [
     path('editar-gestionar-ciclo/<int:ciclo_id>/', views.EditarGestionarCiclo, name='editar-gestionar-ciclo'),
     path('guardar-editar-gestionar-ciclo/<int:ciclo_id>/', views.GuardarEditarGestionarCiclo, name='guardar-editar-gestionar-ciclo'),
     path('eliminar-gestionar-curso/<int:gestionarcurso_id>/', views.EliminarGestionarCiclo, name='eliminar-gestionar-curso'),
-    path('admin-matricula/', views.Matricula,name='admin-Matricula'),
+    path('admin-matricula/', views.RegistrarMatricula,name='admin-Matricula'),
     path('lista-matricula/', views.ListaMatricula,name='lista-matricula'),
     path('buscar-matricula/', views.BuscarMatricula,name='buscar-matricula'),
     
