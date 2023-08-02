@@ -39,5 +39,6 @@ urlpatterns = [
     path('buscar-matricula/', views.BuscarMatricula,name='buscar-matricula'),
     path('editar-matricula/<int:matricula_id>/', views.EditarMatricula, name='editar-matricula'),
     path('guardar-editar-matricula/<int:matricula_id>/', views.GuardarEditarMatricula, name='guardar-editar-matricula'),
+    path('eliminar-matricula/<int:matricula_id>/', views.EliminarMatricula, name='eliminar-matricula'),
     
 ]
