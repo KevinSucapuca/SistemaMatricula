@@ -1,0 +1,100 @@
+{% extends "./base.html" %}
+{% block title %} Lista Matrícula {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>MATRÍCULA</small></h1>
+    </div>
+    <p class="lead">Panel de Administración para listar y modificar la información de las Matrículas registradas. Visualiza de forma organizada todas las Matrículas.</p>
+</div>
+
+<div class="container-fluid">
+<ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-matricula/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVA MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-matricula/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-matricula/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR MATRÍCULA
+            </a>
+        </li>
+</ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE MATRÍCULA</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">FECHA</th>
+                            <th class="text-center">ALUMNO</th>
+                            <th class="text-center">TURNO</th>
+                            <th class="text-center">MODALIDAD</th>
+                            <th class="text-center">CICLO</th>
+                            <th class="text-center">CURSOS</th>
+                            <th class="text-center">EDITAR</th>
+                            <th class="text-center">ELIMINAR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for matricula in listaMatricula %}
+                            <tr>
+                                <td>{{ listaMatricula.start_index|add:forloop.counter0 }}</td>
+                                <td>{{ matricula.fecha|date:'d-m-Y' }}</td>
+                                <td>{{ matricula.alumnoMatricula.nombre }} {{ matricula.alumnoMatricula.apellido }}</td>
+                                <td>{{ matricula.turno }}</td>
+                                <td>{{ matricula.modalidad }}</td>
+                                <td>{{ matricula.cicloMatricula.nombreCiclo }}</td>
+                                <td>
+                                    <ul>
+                                        {% for ciclo_curso in matricula.cicloMatricula.ciclocurso_set.all %}
+                                        <li>{{ ciclo_curso.curso.nombreCurso }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar-matricula' matricula.id %}" class="btn btn-success btn-raised btn-xs">
+                                        <i class="zmdi zmdi-refresh"></i> 
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'eliminar-matricula' matricula.id %}" class="btn btn-danger btn-raised btn-xs">
+                                        <i class="zmdi zmdi-delete"></i> 
+                                    </a>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="9">No se encontraron resultados.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9">{% include "paginacion-buscar-matricula.html" %}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
