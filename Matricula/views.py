@@ -734,6 +734,49 @@ def BuscarMatricula(request):
 
     return render(request, 'admin-buscar-matricula.html', context)
 
+def EditarMatricula(request, matricula_id):
+    editarMatricula = get_object_or_404(Matricula, pk=matricula_id)
+    ciclos = Ciclo.objects.all()
+    alumnos = Alumno.objects.all()
 
+    context = {
+        'editarMatricula': editarMatricula,
+        'ciclos': ciclos,
+        'alumnos': alumnos,
+    }
+    return render(request, 'admin-editar-matricula.html', context)
+
+def GuardarEditarMatricula(request, matricula_id):
+    editarMatricula = get_object_or_404(Matricula, pk=matricula_id)
+    ciclos = Ciclo.objects.all()
+    alumnos = Alumno.objects.all()
+
+    if request.method == 'POST':
+        fecha = request.POST.get('fecha-reg')
+        nombre_ciclo_id = request.POST.get('ciclo-reg')
+        alumno_id = request.POST.get('alumno-reg')
+        turno = request.POST.get('turno-reg')
+        modalidad = request.POST.get('modalidad-reg')
+        
+
+        if not nombre_ciclo_id:
+            messages.error(request, "Debes seleccionar un ciclo.")
+            return render(request, 'admin-editar-matricula.html', {'editarMatricula': editarMatricula, 'ciclos': ciclos, 'alumnos': alumnos})
+        
+        ciclo = Ciclo.objects.get(pk=nombre_ciclo_id)
+        alumno = Alumno.objects.get(pk=alumno_id)
+
+        # Si todo está bien, actualizamos la matricula
+        editarMatricula.fecha = fecha
+        editarMatricula.cicloMatricula = ciclo
+        editarMatricula.alumnoMatricula = alumno
+        editarMatricula.turno = turno
+        editarMatricula.modalidad = modalidad 
+        editarMatricula.save()
+
+        messages.success(request, "Matricula actualizada correctamente.")
+        return redirect('lista-matricula')
+
+    return render(request, 'admin-editar-matricula.html', {'editarMatricula': editarMatricula, 'ciclos': ciclos, 'alumnos': alumnos})
 
     
