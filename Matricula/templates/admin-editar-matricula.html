@@ -1,0 +1,110 @@
+{% extends "./base.html" %}
+{% block title %} Editar Matrícula {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>MATRÍCULA</small></h1>
+    </div>
+    <p class="lead">Panel de Administración dedicado a la gestión de Matrícula, podrás editar fácilmente la Matrícula de manera rápida y sencilla. </p>
+</div>
+
+<div class="container-fluid">
+    <ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-matricula/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVA MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-matricula/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-matricula/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR MATRÍCULA
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-edit"></i> &nbsp; EDITAR MATRÍCULA</h3>
+        </div>
+        <div class="panel-body">
+            <form action="{% url 'guardar-editar-matricula' editarMatricula.id %}" method="POST">
+                {% csrf_token %}
+                <fieldset>
+                    <legend><i class="zmdi zmdi-account-box"></i> &nbsp; Información de Matrícula</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Fecha *</label>
+                                    <input id="fecha-input" class="form-control" type="date" name="fecha-reg" required maxlength="30" value="{{ editarMatricula.fecha|date:'Y-m-d' }}">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Alumno</label>
+                                    <select id="alumno-seleccionado" name="alumno-reg" class="form-control" disabled>
+                                        <option value="">- Seleccionar -</option>
+                                        {% for alumno in alumnos %}
+                                            <option value="{{ alumno.id }}" {% if alumno.id == editarMatricula.alumnoMatricula.id %}selected{% endif %}>{{ alumno.nombre }} {{ alumno.apellido }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="hidden" name="alumno-reg" value="{{ editarMatricula.alumnoMatricula.id }}">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Turno</label>
+                                    <select name="turno-reg" class="form-control">
+                                        <option value="opcion1">- Seleccionar -</option>
+                                        <option value="Mañana" {% if editarMatricula.turno == 'Mañana' %}selected{% endif %}>Mañana</option>
+                                        <option value="Tarde" {% if editarMatricula.turno == 'Tarde' %}selected{% endif %}>Tarde</option>
+                                        <option value="Noche" {% if editarMatricula.turno == 'Noche' %}selected{% endif %}>Noche</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Modalidad</label>
+                                    <select name="modalidad-reg" class="form-control">
+                                        <option value="opcion1">- Seleccionar -</option>
+                                        <option value="Presencial" {% if editarMatricula.modalidad == 'Presencial' %}selected{% endif %}>Presencial</option>
+                                        <option value="Virtual" {% if editarMatricula.modalidad == 'Virtual' %}selected{% endif %}>Virtual</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Ciclo</label>
+                                    <select name="ciclo-reg" class="form-control">
+                                        <option value="">- Seleccionar -</option>
+                                        {% for ciclo in ciclos %}
+                                            <option value="{{ ciclo.id }}" {% if ciclo.id == editarMatricula.cicloMatricula.id %}selected{% endif %}>{{ ciclo.nombreCiclo }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                <p class="text-center" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Modificar</button>
+                    <a href="{% url 'lista-matricula' %}" class="btn btn-default btn-raised btn-sm">
+                        <i class="zmdi zmdi-close-circle"></i> &nbsp; Cancelar
+                    </a>
+                </p>
+            </form>
+            
+
+        
+            {% endblock %}
