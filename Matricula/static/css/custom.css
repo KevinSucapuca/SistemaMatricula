@@ -1,0 +1,56 @@
+/* Estilos para el menú lateral */
+.dashboard-sideBar {
+    background-color: #394256;
+    color: #ffffff;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    padding-top: 60px;
+    overflow-y: auto; /* Habilitar el scroll vertical */
+}
+
+.dashboard-sideBar-title {
+    background-color: #2d3640;
+    font-size: 24px;
+    padding: 10px;
+    border-bottom: 1px solid #3c4653;
+}
+
+.dashboard-sideBar-UserInfo {
+    padding: 20px;
+}
+
+.dashboard-sideBar-UserInfo img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.dashboard-sideBar-Menu li {
+    border-bottom: 1px solid #3c4653;
+}
+
+.dashboard-sideBar-Menu li:last-child {
+    border-bottom: none;
+}
+
+.dashboard-sideBar-Menu a {
+    display: block;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.dashboard-sideBar-Menu a:hover {
+    background-color: #303945;
+}
+
+/* Estilos para el contenido de la página */
+.dashboard-contentPage {
+    padding: 20px;
+    margin-left: 220px;
+}
+
