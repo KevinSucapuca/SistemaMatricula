@@ -699,7 +699,40 @@ def ListaMatricula(request):
 
 def BuscarMatricula(request):
     
-    return render(request, 'admin-buscar-matricula.html')
+    buscarAlumno = request.GET.get('buscar', '')
+    
+
+    listabusquedaAlumno = Alumno.objects.filter(
+        Q(dni__icontains=buscarAlumno) |
+        Q(apellido__icontains=buscarAlumno)
+    ).order_by('apellido')
+
+    listaMatricula = Matricula.objects.filter(
+        alumnoMatricula__in=listabusquedaAlumno
+    ).order_by('-id')
+
+    paginator = Paginator(listaMatricula, 10)
+    pagina = request.GET.get('page') or 1
+    listaMatricula = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaMatricula.paginator.num_pages + 1)
+
+    cursos_por_ciclo = {}
+    for matricula in listaMatricula:
+        ciclo = matricula.cicloMatricula
+        cursos = CicloCurso.objects.filter(ciclo=ciclo)
+        cursos_por_ciclo[ciclo.id] = cursos
+
+    context = {
+        'listaMatricula': listaMatricula,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+        'cursos_por_ciclo': cursos_por_ciclo,
+        'listabusquedaAlumno': listabusquedaAlumno,
+        'buscarAlumno': buscarAlumno
+    }
+
+    return render(request, 'admin-buscar-matricula.html', context)
 
 
 
