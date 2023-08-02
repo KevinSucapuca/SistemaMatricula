@@ -672,12 +672,35 @@ def RegistrarMatricula(request):
 
 
 def ListaMatricula(request):
-    
-    return render(request, 'admin-lista-matricula.html')
+    listaMatricula = Matricula.objects.all().order_by('-id')
+    paginator = Paginator(listaMatricula, 10)
+    pagina = request.GET.get('page') or 1
+    listaMatricula = paginator.get_page(pagina)
+    pagina_actual = int(pagina)
+    paginas = range(1, listaMatricula.paginator.num_pages + 1)
+
+    # Creamos un diccionario para almacenar los cursos asociados a cada ciclo
+    cursos_por_ciclo = {}
+
+    for matricula in listaMatricula:
+        ciclo = matricula.cicloMatricula
+        # Filtramos los CicloCurso asociados al ciclo actual
+        cursos = CicloCurso.objects.filter(ciclo=ciclo)
+        cursos_por_ciclo[ciclo.id] = cursos
+
+    context = {
+        'listaMatricula': listaMatricula,
+        'paginas': paginas,
+        'pagina_actual': pagina_actual,
+        'cursos_por_ciclo': cursos_por_ciclo  # Pasamos el diccionario al contexto
+    }
+
+    return render(request, 'admin-lista-matricula.html', context)
 
 def BuscarMatricula(request):
     
     return render(request, 'admin-buscar-matricula.html')
+
 
 
     
