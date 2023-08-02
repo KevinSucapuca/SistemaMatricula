@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Docente,Alumno,Ciclo,Curso,CicloCurso
+from .models import Docente,Alumno,Ciclo,Curso,CicloCurso,Matricula
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -10,10 +10,12 @@ def home(request):
     total_cursos = Curso.objects.all().count()
     total_docentes = Docente.objects.all().count()
     total_alumnos = Alumno.objects.all().count()
+    total_matriculados = Matricula.objects.all().count()
     context = {
         'total_cursos': total_cursos,
         'total_docentes': total_docentes,
-        'total_alumnos': total_alumnos
+        'total_alumnos': total_alumnos,
+        'total_matriculados': total_matriculados
     }
     return render(request, 'home.html', context)
 #Docente
@@ -585,9 +587,89 @@ def EliminarGestionarCiclo(request,gestionarcurso_id):
     return redirect('lista-gestionar-ciclo')
 
 #Matrícula
-def Matricula(request):
+def BuscarAlumnosAMatricular(request):
+    ciclos = Ciclo.objects.all()
+    buscarAlumno = request.GET.get('buscar', '').strip()
+
+    if buscarAlumno:
+        listabusquedaAlumno = Alumno.objects.filter(
+            Q(dni__icontains=buscarAlumno) |
+            Q(apellido__icontains=buscarAlumno)
+        ).order_by('apellido')
+    else:
+        listabusquedaAlumno = Alumno.objects.all().order_by('apellido')
     
-    return render(request, 'admin-matricula.html')
+    
+    context = {
+        'listabusquedaAlumno': listabusquedaAlumno,
+        'ciclos': ciclos,
+        
+    }
+    return render(request, 'admin-matricula.html', context)
+
+def RegistrarMatricula(request):
+    alumnos = Alumno.objects.all()
+    ciclos = Ciclo.objects.all()
+    listabusquedaAlumno = []
+    alumno_id = None
+
+    if 'buscar' in request.GET:
+        buscarAlumno = request.GET['buscar']
+        listabusquedaAlumno = Alumno.objects.filter(
+            Q(dni__icontains=buscarAlumno) |
+            Q(apellido__icontains=buscarAlumno)
+        ).order_by('apellido')
+        if listabusquedaAlumno.exists():
+            alumno_id = listabusquedaAlumno[0].id  # Obtenemos el ID del alumno buscado
+    
+    if request.method == 'POST':
+        # Obtener los datos enviados desde el formulario
+        fecha = request.POST.get('fecha-reg')
+        alumno_id = request.POST.get('alumno-reg')
+        turno = request.POST.get('turno-reg')
+        modalidad = request.POST.get('modalidad-reg')
+        ciclo_id = request.POST.get('ciclo-reg')
+        
+        if not alumno_id:
+            messages.error(request, "Debes seleccionar un Alumno.")
+            return render(request, 'admin-matricula.html', {'alumnos': alumnos,'ciclos': ciclos})
+        if not ciclo_id:
+            messages.error(request, "Debes seleccionar un Ciclo.")
+            return render(request, 'admin-matricula.html', {'alumnos': alumnos,'ciclos': ciclos})
+        if not turno or turno == 'opcion1':
+            messages.error(request, "Debes seleccionar un turno válido.")
+            return render(request, 'admin-matricula.html', {'alumnos': alumnos,'ciclos': ciclos})
+        if not modalidad or modalidad == 'opcion1':
+            messages.error(request, "Debes seleccionar una modalidad válida.")
+            return render(request, 'admin-matricula.html', {'alumnos': alumnos,'ciclos': ciclos})
+        
+        # Obtener las instancias de Alumno y Ciclo asociadas a los IDs
+        alumno = Alumno.objects.get(pk=alumno_id)
+        ciclo = Ciclo.objects.get(pk=ciclo_id)
+        
+        # Verificar si el alumno está matriculado
+        if Matricula.objects.filter(alumnoMatricula=alumno).exists():
+            messages.error(request, "El Alumno ya está matriculado")
+            return render(request, 'admin-matricula.html', {'alumnos': alumnos,'ciclos': ciclos})
+
+        # Crear una nueva instancia de Matricula y guardarla en la base de datos
+        matricula = Matricula(fecha=fecha, alumnoMatricula=alumno, cicloMatricula=ciclo, turno=turno, modalidad=modalidad)
+
+        matricula.save()
+
+        
+        messages.success(request, "Matrícula registrada correctamente.")
+        return redirect('lista-matricula')
+    context = {
+        'alumnos': alumnos,
+        'ciclos': ciclos,
+        'listabusquedaAlumno': listabusquedaAlumno,
+        'alumno_id': alumno_id,
+        
+    }
+
+    return render(request, 'admin-matricula.html', context)
+
 
 def ListaMatricula(request):
     
