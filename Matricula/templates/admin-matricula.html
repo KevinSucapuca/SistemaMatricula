@@ -1,0 +1,129 @@
+{% extends "./base.html" %}
+{% block title %} Matrícula {% endblock %}
+
+{% block section %}
+
+<div class="container-fluid">
+    <div class="page-header">
+    <h1 class="text-titles"><i class="zmdi zmdi-account zmdi-hc-fw"></i> ADMIN <small>MATRÍCULA</small></h1>
+    </div>
+    <p class="lead">Panel de Administración dedicado a la gestión de Matrícula, podrás agregar fácilmente nuevas Matrículas al sistema de manera rápida y sencilla. </p>
+</div>
+
+<div class="container-fluid">
+    <ul class="breadcrumb breadcrumb-tabs">
+        <li>
+            <a href="{{ '/admin-matricula/' }}" class="btn btn-info">
+                <i class="zmdi zmdi-plus"></i> &nbsp; NUEVA MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/lista-matricula/' }}" class="btn btn-success">
+                <i class="zmdi zmdi-format-list-bulleted"></i> &nbsp; LISTA DE MATRÍCULA
+            </a>
+        </li>
+        <li>
+            <a href="{{ '/buscar-matricula/' }}" class="btn btn-primary">
+                <i class="zmdi zmdi-search"></i> &nbsp; BUSCAR MATRÍCULA
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container-fluid">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title"><i class="zmdi zmdi-plus"></i> &nbsp; NUEVA MATRÍCULA</h3>
+        </div>
+        <div class="panel-body">
+            <!-- Formulario de búsqueda de alumnos -->
+            <form method="GET" action="{% url 'buscar-alumno-a-matricular' %}">
+                <div class="form-group label-floating">
+                    <label class="control-label">Buscar Alumno (DNI o Apellido)</label>
+                    <input class="form-control" type="text" name="buscar" value="{{ request.GET.buscar }}">
+                </div>
+                <p class="text-center">
+                    <button type="submit" class="btn btn-primary btn-raised btn-sm"><i class="zmdi zmdi-search"></i> &nbsp; Buscar</button>
+                </p>
+            </form>
+
+            
+
+            <!-- Formulario de matrícula -->
+            <form action="/admin-matricula/" method="POST">{% csrf_token %}
+                <fieldset>
+                    <legend><i class="zmdi zmdi-account-box"></i> &nbsp; Información de Matrícula</legend>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Fecha *</label>
+                                    <input id="fecha-input" class="form-control" type="date" name="fecha-reg" required maxlength="30">
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Alumno</label>
+                                    <select id="alumno-seleccionado" name="alumno-reg" class="form-control">
+                                        <option value="">- Seleccionar -</option>
+                                        {% if listabusquedaAlumno %}
+                                        {% for alumno in listabusquedaAlumno %}
+                                        <option value="{{ alumno.id }}" selected>{{ alumno.nombre }} {{ alumno.apellido }}</option>
+                                        {% endfor %}
+                                        {% else %}
+                                            {% for alumno in alumnos %}
+                                                <option value="{{ alumno.id }}" {% if alumno.id == alumno_id %}selected{% endif %}>{{ alumno.nombre }} {{ alumno.apellido }}</option>
+                                            {% endfor %}
+                                            {% if 'buscar' in request.GET and not listabusquedaAlumno.exists %}
+                                                <option value="" disabled>No se encontraron resultados</option>
+                                            {% endif %}
+                                        {% endif %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Turno</label>
+                                    <select name="turno-reg" class="form-control">
+                                        <option value="opcion1">- Seleccionar -</option>
+                                        <option value="Mañana">Mañana</option>
+                                        <option value="Tarde">Tarde</option>
+                                        <option value="Noche">Noche</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Modalidad</label>
+                                    <select name="modalidad-reg" class="form-control">
+                                        <option value="opcion1">- Seleccionar -</option>
+                                        <option value="Presencial">Presencial</option>
+                                        <option value="Virtual">Virtual</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-8">
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Ciclo</label>
+                                    <select name="ciclo-reg" class="form-control">
+                                        <option value="">- Seleccionar -</option>
+                                        {% for ciclo in ciclos %}
+                                            <option value="{{ ciclo.id }}">{{ ciclo.nombreCiclo }} - {{ ciclo.carrera }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br>
+                <p class="text-center" style="margin-top: 20px;">
+                    <button type="submit" class="btn btn-info btn-raised btn-sm"><i class="zmdi zmdi-floppy"></i> Guardar</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
