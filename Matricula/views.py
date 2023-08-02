@@ -779,4 +779,8 @@ def GuardarEditarMatricula(request, matricula_id):
 
     return render(request, 'admin-editar-matricula.html', {'editarMatricula': editarMatricula, 'ciclos': ciclos, 'alumnos': alumnos})
 
-    
+def EliminarMatricula(request,matricula_id):
+    MatriculaEliminar = Matricula.objects.get(pk=matricula_id)
+    MatriculaEliminar.delete()
+    messages.success(request, "Matrícula eliminada correctamente.")
+    return redirect('lista-matricula')
