@@ -12,10 +12,10 @@
 }
 
 .dashboard-sideBar-title {
-    background-color: #2d3640;
+    background-color: #394256;
     font-size: 24px;
     padding: 10px;
-    border-bottom: 1px solid #3c4653;
+    border-bottom: 1px solid #394256;
 }
 
 .dashboard-sideBar-UserInfo {
@@ -30,7 +30,7 @@
 }
 
 .dashboard-sideBar-Menu li {
-    border-bottom: 1px solid #3c4653;
+    border-bottom: 1px solid #394256;
 }
 
 .dashboard-sideBar-Menu li:last-child {
