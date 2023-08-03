@@ -27,81 +27,158 @@
     {% block css %}
     {% endblock %}
     <style>
-        /* Tus estilos personalizados aquí */
+        /* Estilos CSS para controlar la apariencia del sidebar y del contenido */
+        @media (max-width: 767px) {
+            .dashboard-sideBar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: -200px; /* Ocultar el sidebar por defecto en pantallas pequeñas */
+                width: 200px;
+                z-index: 1000; /* Asegurar que el sidebar aparezca por encima del contenido */
+                background-color: #394256; /* Ajustar el color de fondo del sidebar según tu diseño */
+                transition: left 0.3s ease; /* Agregar transición para animar la aparición/desaparición del sidebar */
+            }
+
+            .dashboard-contentPage {
+                margin-left: 0; /* Asegurarse de que el contenido ocupe todo el ancho en pantallas pequeñas */
+                transition: margin-left 0.3s ease; /* Agregar transición para ajustar el contenido al mostrar/ocultar el sidebar */
+            }
+
+            .sidebar-open .dashboard-sideBar {
+                left: 0; /* Mostrar el sidebar cuando se active la clase "sidebar-open" */
+            }
+
+            .sidebar-open .dashboard-contentPage {
+                margin-left: 200px; /* Ajustar el contenido para dar espacio al sidebar abierto */
+            }
+        }
     </style>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			<section class="col-xs-12 col-sm-4 col-md-3 col-lg-2 dashboard-sideBar ">
-				<div class="text-uppercase text-center text-titles dashboard-sideBar-title">
-					Matrícula Kevin Sucapuca
-				</div>
-	
-				<div class="dashboard-sideBar-UserInfo bg-light text-center p-3">
-					<figure class="mb-3">
-						<img src="{% static 'assets/avatars/AdminMaleAvatar.png' %}" alt="UserIcon" class="img-circle" width="100" height="100">
-						<figcaption class="text-titles">Usuario</figcaption>
-					</figure>
-					<ul class="list-unstyled">
-						<li>
-							<a href="#!" title="Salir del sistema" class="btn-exit-system">
-								<i class="zmdi zmdi-power"></i>
-							</a>
-						</li>
-					</ul>
-				</div>
-			
-		
-	
-	
-				<ul class="list-unstyled dashboard-sideBar-Menu">
-					<li>
-						<a href="{{ '/' }}">
-							<i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i> Inicio
-						</a>
-					</li>
-					<li>
-						<a href="#!" class="btn-sideBar-SubMenu" data-toggle="collapse" data-target="#admin-menu">
-							<i class="zmdi zmdi-case zmdi-hc-fw"></i> Administración <i class="zmdi zmdi-caret-down pull-right"></i>
-						</a>
-						<ul class="list-unstyled collapse" id="admin-menu">
-							<li>
-								<a href="{{ '/admin-docente/' }}"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Docentes</a>
-							</li>
-							<li>
-								<a href="{{ '/admin-alumno/' }}"><i class="zmdi zmdi-male-female zmdi-hc-fw"></i> Estudiantes</a>
-							</li>
-							<li>
-								<a href="{{ '/admin-curso/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Cursos</a>
-							</li>
-							<li>
-								<a href="{{ '/admin-ciclo/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Ciclos</a>
-							</li>
-							<li>
-								<a href="{{ '/admin-gestionar-ciclo/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Gestrionar Ciclos</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<a href="#!" class="btn-sideBar-SubMenu" data-toggle="collapse" data-target="#matricula-menu">
-							<i class="zmdi zmdi-case zmdi-hc-fw"></i> Matrícula <i class="zmdi zmdi-caret-down pull-right"></i>
-						</a>
-						<ul class="list-unstyled collapse" id="matricula-menu">
-							<li>
-								<a href="{{ '/admin-matricula/' }}"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Realizar Matrícula</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</section>
-	
-			<section class="col-xs-12 col-sm-8 col-md-9 col-lg-10 dashboard-contentPage">
-				{% block section %}
-				{% endblock %}
-			</section>
-		</div>
-	</div>
+	<nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Kevin Sucapuca</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <section class="col-xs-12 col-sm-4 col-md-3 col-lg-2 dashboard-sideBar">
+                <div class="text-uppercase text-center text-titles dashboard-sideBar-title">
+                    Sistema Matrícula
+                </div>
+
+                <style>
+                    .dashboard-sideBar-UserInfo ul {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;
+                    }
+                
+                    .btn-exit-system {
+                        color: white;
+                    }
+                    .sidebar-footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 30px;
+        margin-left: -15px;
+    }
+                    
+                </style>
+                
+                <div class="dashboard-sideBar-UserInfo bg-light text-center p-3">
+                    {% if user.is_authenticated %}
+                    <figure class="mb-3">
+                        <img src="{% static 'assets/avatars/AdminMaleAvatar.png' %}" alt="UserIcon" class="img-circle" width="100" height="100">
+                        <figcaption class="text-titles">Bienvenido @{{ user.username }}</figcaption>
+                    </figure>
+                    <ul class="list-unstyled d-flex">
+                        <li>
+                            <a href="{% url 'logout' %}" title="Salir del sistema" class="btn-exit-system">
+                                <i class="zmdi zmdi-power" style="font-size: 30px;"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                    {% else %}
+                    <ul class="list-unstyled d-flex">
+                        <li>
+                            <a href="{% url 'login' %}" title="Iniciar sesión" class="btn-exit-system">
+                                <i class="zmdi zmdi-sign-in" style="font-size: 30px;"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'register' %}" title="Registrarse" class="btn-exit-system">
+                                <i class="zmdi zmdi-account-add" style="font-size: 30px;"></i> Registrarse
+                            </a>
+                        </li>
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <ul class="list-unstyled dashboard-sideBar-Menu">
+                    <li>
+                        <a href="{{ '/' }}">
+                            <i class="zmdi zmdi-view-dashboard zmdi-hc-fw"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#!" class="btn-sideBar-SubMenu" data-toggle="collapse" data-target="#admin-menu">
+                            <i class="zmdi zmdi-case zmdi-hc-fw"></i> Administración <i class="zmdi zmdi-caret-down pull-right"></i>
+                        </a>
+                        <ul class="list-unstyled collapse" id="admin-menu">
+                            <li>
+                                <a href="{{ '/admin-docente/' }}"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Docentes</a>
+                            </li>
+                            <li>
+                                <a href="{{ '/admin-alumno/' }}"><i class="zmdi zmdi-male-female zmdi-hc-fw"></i> Estudiantes</a>
+                            </li>
+                            <li>
+                                <a href="{{ '/admin-curso/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Cursos</a>
+                            </li>
+                            <li>
+                                <a href="{{ '/admin-ciclo/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Ciclos</a>
+                            </li>
+                            <li>
+                                <a href="{{ '/admin-gestionar-ciclo/' }}"><i class="zmdi zmdi-labels zmdi-hc-fw"></i> Gestrionar Ciclos</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#!" class="btn-sideBar-SubMenu" data-toggle="collapse" data-target="#matricula-menu">
+                            <i class="zmdi zmdi-case zmdi-hc-fw"></i> Matrícula <i class="zmdi zmdi-caret-down pull-right"></i>
+                        </a>
+                        <ul class="list-unstyled collapse" id="matricula-menu">
+                            <li>
+                                <a href="{{ '/admin-matricula/' }}"><i class="zmdi zmdi-account zmdi-hc-fw"></i> Realizar Matrícula</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="sidebar-footer text-center">
+                    <p class="text-muted small">Desarrollado por Kevin Sucapuca</p>
+                    
+                </div>
+            </section>
+
+            <section class="col-xs-12 col-sm-8 col-md-9 col-lg-10 dashboard-contentPage">
+                {% block section %}
+                {% endblock %}
+            </section>
+        </div>
+        
+    </div>
 	{% if messages %}
 	{% for message in messages %}
 		<script>
@@ -118,6 +195,15 @@
     <script src="{% static 'js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
     <script src="{% static 'js/material.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+	<script>
+        $(document).ready(function () {
+            $(".navbar-toggle").click(function () {
+                // Agregar o quitar la clase "sidebar-open" para mostrar u ocultar el sidebar en pantallas pequeñas
+                $("body").toggleClass("sidebar-open");
+            });
+        });
+    </script>
 
 <link href="https://cdn.jsdelivr.net/npm/material-design-icons@3.0.1/iconfont/material-icons.css" rel="stylesheet">
 </body>
