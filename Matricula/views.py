@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
 
 def Register(request):
     if request.method == 'POST':
@@ -12,10 +13,19 @@ def Register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data['username']
-            messages.success(request, "Usuario registrado Correctamente")
+            messages.success(request, "Usuario registrado correctamente")
+            return redirect('login')
+        else:
+            errors = form.errors
+            password_errors = errors.get('password1', []) + errors.get('password2', [])
+            if 'This password is too common.' in password_errors:
+                messages.error(request, "Su contraseña no puede ser una clave utilizada comúnmente.")
+            else:
+                messages.error(request, "Su contraseña debe contener al menos 8 caracteres, (mayúsculas, minúsculas y números)")
+                
     else: 
         form = UserRegisterForm()
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'registration/registro.html', context)
 
 def home(request):
