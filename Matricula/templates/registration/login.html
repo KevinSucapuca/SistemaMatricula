@@ -23,7 +23,12 @@
                     <h3 class="panel-title text-center">Iniciar Sesión</h3>
                 </div>
                 <div class="panel-body">
-                    <form action="" method="POST" autocomplete="off" class="logInForm">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> Usuario o contraseña incorrectos. Por favor, inténtalo de nuevo.
+                        </div>
+                    {% endif %}
+                    <form action="{% url 'login' %}" method="post" autocomplete="off" class="logInForm">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
@@ -38,9 +43,6 @@
                         </div>
                     </form>
                 </div>
-            </div>
-            <div class="text-center">
-                <p>¿No tienes una cuenta? Regístrate <a href="{% url 'register' %}">aquí</a>.</p>
             </div>
         </div>
     </div>
