@@ -41,7 +41,7 @@ def home(request):
     }
     return render(request, 'home.html', context)
 #Docente
-@login_required
+
 def RegistrarDocente(request):
     dniExiste = False
 
@@ -66,7 +66,7 @@ def RegistrarDocente(request):
 
     return render(request, 'admin-docente.html', {'dniExiste': dniExiste})
     
-@login_required
+
 def ListaDocente(request):
     listaDocente = Docente.objects.all().order_by('apellido')
     paginator = Paginator(listaDocente, 10)
@@ -80,7 +80,7 @@ def ListaDocente(request):
         'pagina_actual': pagina_actual
         }
     return render(request, 'admin-lista-docente.html', context)
-@login_required
+
 def BuscarDocente(request):
     if 'buscar' in request.GET:
         buscarDocente = request.GET['buscar']
@@ -144,7 +144,7 @@ def EliminarDocente(request,docente_id):
 
 
 #Alumno
-@login_required
+
 def RegistrarAlumno(request):
     DniAlumnoExiste = False
 
@@ -170,7 +170,7 @@ def RegistrarAlumno(request):
             'DniAlumnoExiste': DniAlumnoExiste,
             }
     return render(request, 'admin-alumno.html', context) 
-@login_required
+
 def ListaAlumno(request):
     listaAlumno = Alumno.objects.all().order_by('apellido')
     paginator = Paginator(listaAlumno, 10)
@@ -185,7 +185,7 @@ def ListaAlumno(request):
         }
     
     return render(request, 'admin-lista-alumno.html', context)
-@login_required
+
 def BuscarAlumno(request):
     if 'buscar' in request.GET:
         buscarAlumno = request.GET['buscar']
@@ -247,7 +247,7 @@ def EliminarAlumno(request,alumno_id):
     return redirect('/lista-alumno')
 
 #Curso
-@login_required
+
 def RegistrarCurso(request):
     docentes = Docente.objects.all()  # Obtener todos los docentes de la base de datos
 
@@ -292,7 +292,7 @@ def RegistrarCurso(request):
     context = {'docentes': docentes}
     return render(request, 'admin-curso.html', context)
 
-@login_required
+
 def ListaCurso(request):
     listaCurso = Curso.objects.all().order_by('nombreCurso')
     paginator = Paginator(listaCurso, 10)
@@ -307,7 +307,7 @@ def ListaCurso(request):
         }
     
     return render(request, 'admin-lista-curso.html', context)
-@login_required
+
 def BuscarCurso(request):
     if 'buscar' in request.GET:
         buscarCurso = request.GET['buscar']
@@ -392,7 +392,7 @@ def RegistrarCiclo(request):
         return redirect('lista-ciclo')
 
     return render(request, 'admin-ciclo.html')
-@login_required
+
 def ListaCiclo(request):
     listaCiclo = Ciclo.objects.all().order_by('-id')
     paginator = Paginator(listaCiclo, 10)
@@ -407,7 +407,7 @@ def ListaCiclo(request):
         }
     
     return render(request, 'admin-lista-ciclo.html', context)
-@login_required
+
 def BuscarCiclo(request):
     if 'buscar' in request.GET:
         buscarCiclo = request.GET['buscar']
@@ -469,7 +469,7 @@ def EliminarCiclo(request,ciclo_id):
     return redirect('/lista-ciclo')
 
 #GestionarCiclo
-@login_required
+
 def GestionarCiclo(request):
     ciclos = Ciclo.objects.all()
     cursos = Curso.objects.all()
@@ -509,7 +509,7 @@ def GestionarCiclo(request):
     context = {'ciclos': ciclos, 'cursos': cursos}
     return render(request, 'admin-gestionar-ciclo.html', context) 
 
-@login_required
+
 def ListaGestionarCiclo(request):
     
     listaGestionarCiclo = CicloCurso.objects.all().order_by('-ciclo_id')
@@ -525,7 +525,7 @@ def ListaGestionarCiclo(request):
         }
     
     return render(request, 'admin-lista-gestionar-ciclo.html', context)
-@login_required
+
 def BuscarGestionarCiclo(request):
     if 'buscar' in request.GET:
         buscarGestionarCiclo = request.GET['buscar']
@@ -637,7 +637,7 @@ def BuscarAlumnosAMatricular(request):
     }
     return render(request, 'admin-matricula.html', context)
 
-@login_required
+
 def RegistrarMatricula(request):
     alumnos = Alumno.objects.all()
     ciclos = Ciclo.objects.all()
@@ -701,7 +701,7 @@ def RegistrarMatricula(request):
 
     return render(request, 'admin-matricula.html', context)
 
-@login_required
+
 def ListaMatricula(request):
     listaMatricula = Matricula.objects.all().order_by('-id')
     paginator = Paginator(listaMatricula, 10)
@@ -728,7 +728,7 @@ def ListaMatricula(request):
 
     return render(request, 'admin-lista-matricula.html', context)
 
-@login_required
+
 def BuscarMatricula(request):
     
     buscarAlumno = request.GET.get('buscar', '')
